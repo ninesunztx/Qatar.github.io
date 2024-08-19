@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+  <title>Pytorch实现线性回归 [ Qatar ]</title>
+  <link rel="icon" href="/favicon-2.ico" type="image/x-icon">
+  
+    <!-- stylesheets list from config.yml -->
+    
+      <link rel="stylesheet" href="/css/iLiKE.css">
+    
+  
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js"></script>
+    <script id="leancloud">
+      AV.init({
+          appId: "WIzeusj8QeFJSMb1iNuE4tHp-gzGzoHsz",
+          appKey: "T1vvZUnL3XUXKhaWV2sLwQj1"
+      });
+    </script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div class="header">
+        <div class="container">
+    <div class="menu">
+      <div class="menu-left">
+        <a href="/">
+          <img src="/favicon-2.ico"></img>
+        </a>
+      </div>
+      <div class="menu-right">
+        
+          
+          
+          
+          
+          
+          
+          <a href="/">首页</a>
+        
+          
+          
+          
+          
+          
+          
+          <a href="/archives">归档</a>
+        
+          
+          
+          
+          
+          
+          
+          <a href="/about">关于</a>
+        
+      </div>
+    </div>
+</div>
+    </div>
+    <div class="container">
+        <h1 class="post-title">Pytorch实现线性回归</h1>
+<article class="post markdown-style">
+  <h2 id="1-前置公式"><a href="#1-前置公式" class="headerlink" title="1.前置公式"></a>1.前置公式</h2><table>
+<thead>
+<tr>
+<th align="center">线性模型</th>
+<th align="center">ŷ &#x3D; x * w + b</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">损失函数</td>
+<td align="center">loss &#x3D; (ŷ - y)2</td>
+</tr>
+<tr>
+<td align="center">权重更新</td>
+<td align="center">w &#x3D; w - ɑ*d(loss)&#x2F;dw</td>
+</tr>
+<tr>
+<td align="center">反向传播</td>
+<td align="center">略</td>
+</tr>
+</tbody></table>
+<p>构建神经网络的过程就是在构建一个多重的计算图。</p>
+<p><img src="//cdn.qatarxt.top/image-20240819152132795.png" alt="image-20240819152132795"></p>
+<h2 id="2-pytorch实现线性回归"><a href="#2-pytorch实现线性回归" class="headerlink" title="2.pytorch实现线性回归"></a>2.pytorch实现线性回归</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line">x_data = torch.Tensor([[<span class="number">1.0</span>], [<span class="number">2.0</span>], [<span class="number">3.0</span>]])</span><br><span class="line">y_data = torch.Tensor([[<span class="number">2.0</span>], [<span class="number">4.0</span>], [<span class="number">6.0</span>]])</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LinearModel</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(LinearModel, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.linear = torch.nn.Linear(<span class="number">1</span>, <span class="number">1</span>) <span class="comment">#输入维度是1，输出维度是1</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        y_pred = <span class="variable language_">self</span>.linear(x)</span><br><span class="line">        <span class="keyword">return</span> y_pred</span><br><span class="line">model = LinearModel()</span><br><span class="line"></span><br><span class="line">criterion = torch.nn.MSELoss(reduction=<span class="string">&#x27;sum&#x27;</span>) <span class="comment">#不对batch里的loss求平均</span></span><br><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr=<span class="number">0.01</span>) <span class="comment">#对w和b取出更新,学习率0.01</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">    y_pred = model(x_data)</span><br><span class="line">    loss = criterion(y_pred, y_data)</span><br><span class="line">    <span class="built_in">print</span>(epoch, loss.item()) <span class="comment">#item取标量，否则取出的是一个计算图</span></span><br><span class="line">    </span><br><span class="line">    optimizer.zero_grad()</span><br><span class="line">    loss.backward()</span><br><span class="line">    optimizer.step()</span><br><span class="line">    </span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;w=&quot;</span>, model.linear.weight.item())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;b=&quot;</span>, model.linear.bias.item())</span><br><span class="line"></span><br><span class="line">x_test = torch.Tensor([[<span class="number">4.0</span>]])</span><br><span class="line">y_test = model(x_test)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;y_pred=&quot;</span>, y_test.data)</span><br></pre></td></tr></table></figure>
+
+<p><img src="//cdn.qatarxt.top/image-20240819152544564.png" alt="image-20240819152544564"></p>
+
+</article>
+
+    <div class="pagenator post-pagenator">
+    
+    
+
+    
+    <p>上次更新 2024-08-19</p>
+    
+    
+        <a class="extend next post-next" href="/2024/08/19/CC++%E6%8C%87%E9%92%88%E7%90%86%E8%A7%A3/">下一篇</a>
+    
+    </div>
+
+
+    </div>
+    <div class="footer">
+        <div class="container">
+    <div class="social">
+	<ul class="social-list">
+		
+			
+				
+				
+				<li>
+					<a href="mailto:3253519642@qq.com" title="email" target="_blank">
+					<i class="fa fa-email"></i>
+					</a>
+				</li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				
+				<li>
+					<a href="https://github.com/ninesunztx" title="github" target="_self">
+					<i class="fa fa-github"></i>
+					</a>
+				</li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+	</ul>
+</div>
+    <div class="copyright">
+        <span>
+            
+            
+            
+                © Qatar 2024
+            
+        </span>
+    </div>
+    <div class="power">
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/CaiChenghan/iLiKE">iLiKE Theme</a>
+        </span>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <!--page counter part-->
+<script>
+function addCount (Counter) {
+    url=$('.article-date').attr('href').trim();
+    title = $('.article-title').text().trim();
+    var query = new AV.Query(Counter);
+    //use url as unique idnetfication
+    query.equalTo("url",url);
+    query.find({
+        success: function(results) {
+            if (results.length>0) {
+                var counter=results[0];
+                counter.fetchWhenSave(true); //get recent result
+                counter.increment("time");
+                counter.save();
+            } else {
+                var newcounter=new Counter();
+                newcounter.set("title",title);
+                newcounter.set("url",url);
+                newcounter.set("time",1);
+                newcounter.save(null,{
+                    success: function(newcounter) {
+                        //alert('New object created');
+                    }, error: function(newcounter,error) {
+                        alert('Failed to create');
+                    }
+                })
+            }
+        },
+        error: function(error) {
+            //find null is not a error
+            alert('Error:'+error.code+" "+error.message);
+        }
+    });
+}
+$(function() {
+    var Counter=AV.Object.extend("Counter");
+    //only increse visit counting when intering a page
+    if ($('.article-title').length == 1) {
+       addCount(Counter);
+    }
+    var query=new AV.Query(Counter);
+    query.descending("time");
+    // the sum of popular posts
+    query.limit(10); 
+    query.find({
+        success: function(results) {
+                for(var i=0;i<results.length;i++) {
+                    var counter=results[i];
+                    title=counter.get("title");
+                    url=counter.get("url");
+                    time=counter.get("time");
+                    // add to the popularlist widget
+                    showcontent=title+" ("+time+")";
+                    //notice the "" in href
+                    $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                }
+            },
+        error: function(error) {
+            alert("Error:"+error.code+" "+error.message);
+        }
+    });
+});
+</script>
+</div>
+    </div>
+</body>
+</html>
