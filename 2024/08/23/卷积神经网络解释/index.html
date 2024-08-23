@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+  <title>卷积神经网络解释 [ Qatar ]</title>
+  <link rel="icon" href="/favicon-2.ico" type="image/x-icon">
+  
+    <!-- stylesheets list from config.yml -->
+    
+      <link rel="stylesheet" href="/css/iLiKE.css">
+    
+  
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js"></script>
+    <script id="leancloud">
+      AV.init({
+          appId: "WIzeusj8QeFJSMb1iNuE4tHp-gzGzoHsz",
+          appKey: "T1vvZUnL3XUXKhaWV2sLwQj1"
+      });
+    </script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div class="header">
+        <div class="container">
+    <div class="menu">
+      <div class="menu-left">
+        <a href="/">
+          <img src="/favicon-2.ico"></img>
+        </a>
+      </div>
+      <div class="menu-right">
+        
+          
+          
+          
+          
+          
+          
+          <a href="/">首页</a>
+        
+          
+          
+          
+          
+          
+          
+          <a href="/archives">归档</a>
+        
+          
+          
+          
+          
+          
+          
+          <a href="/about">关于</a>
+        
+      </div>
+    </div>
+</div>
+    </div>
+    <div class="container">
+        <h1 class="post-title">卷积神经网络解释</h1>
+<article class="post markdown-style">
+  <p>卷积神经网络是一种常用于图像相关任务的网络架构，由于图像信息矩阵有[W, H, C]三个信息，加上神经元的情况下，采取全连接网络时涉及的权重太多，计算量太大，并且会大大提升过拟合的风险，因此对这种任务网络会进行一些简化，形成卷积神经网络。</p>
+<h2 id="1-感受野（卷积核）"><a href="#1-感受野（卷积核）" class="headerlink" title="1.感受野（卷积核）"></a>1.感受野（卷积核）</h2><p>在进行图像分类过程中，我们只需要关注一些物体的重要特征(模式)就可以判断一个物体的类别，因此不需要将整张图片直接输入，而是只关注一小部分图片就可以，就可以检测这些模式。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823132012624.png" alt="image-20240823132012624"></p>
+<p>于是卷积神经网络可以设定一个小区域(感受野)去对图片物体的重要模式进行检测，下图的感受野范围为3 * 3 * 3 &#x3D; 27维的向量，也就是神经元有27个权重。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823112409332.png" alt="image-20240823112409332.png"></p>
+<p>感受野可以重叠或者相同，一般一个感受野有一组神经元守备，平移一个感受野就可以获得一个新的感受野，平移量称为步幅，感受野之间最好要有重叠，所以步幅不会设置的太大。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823115748958.png" alt="image-20240823115748958.png"></p>
+<p>如果感受野超出图像范围，则要对超出部分进行填充，例如0填充。</p>
+<h2 id="2-共享参数"><a href="#2-共享参数" class="headerlink" title="2.共享参数"></a>2.共享参数</h2><p>做检测的神经元可以供多个感受野共用进行模式匹配，因此这些神经元的参数可以相同，因此每组感受野都只有一组检测参数，这组参数叫做滤波器。</p>
+<p>感受野加上参数共享就是<strong>卷积层</strong>，用到卷积层的网络就叫卷积神经网络。一个卷积层里面就是有一排的滤波器，每个滤波器都是一个 3 <em>×</em> 3 <em>×</em> 通道(假设是3x3)，其作用是要去图像里面检测某个模式。这些模式要在 3 <em>×</em> 3 <em>×</em> 通道，这个小的范围内，它才能够被这些滤波器检测出来。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823132505620.png" alt="image-20240823132505620"></p>
+<p>滤波器要对对应感受野作内积。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823132524717.png" alt="image-20240823132524717"></p>
+<p>每个滤波器都要对图片进行扫描，得到一组数据，如果有 64 个滤波器，就可以得到 64 组的数字。这组数字称为特征映射。当一张图像通过一个卷积层里面一堆滤波器的时候，就会产生一个特征映射。特征映射可以看成是另外一张新的图像，只是这个图像的通道不是 RGB 3 个通道，有64 个通道，每个通道就对应到一个滤波器。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823133040526.png" alt="image-20240823133040526"></p>
+<p>卷积神经网络可以叠很多卷积层，前一层输出的图像通道数必须是下一卷积层的滤波器高度。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823133518490.png" alt="image-20240823133518490"></p>
+<p>另一种角度来说，共享权重其实就是用滤波器扫过一张图像，这个过程就是卷积。这就是卷积层名字的由来。把滤波器扫过图像就相当于不同的感受野神经元可以共用参数，这组共用的参数就叫做一个滤波器。</p>
+<h2 id="3-下采样"><a href="#3-下采样" class="headerlink" title="3.下采样"></a>3.下采样</h2><p>下采样的方式就是汇聚，即把图片变小但不改变通道数。通过滤波器图像生成一组数据，汇聚就是将这组数据分组提取。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823120959169.png" alt="image-20240823120959169"></p>
+<p>一般在实践上，往往就是卷积跟汇聚交替使用，可能做几次卷积，做一次汇聚。比如两次卷积，一次汇聚。不过汇聚对于模型的性能可能会带来一点伤害。假设要检测的是非常微细的东西，随便做下采样，性能可能会差一点。</p>
+<p><img src="//cdn.qatarxt.top/image-20240823121213383.png" alt="image-20240823121213383"></p>
+
+</article>
+
+    <div class="pagenator post-pagenator">
+    
+    
+
+    
+    <p>上次更新 2024-08-23</p>
+    
+    
+        <a class="extend next post-next" href="/2024/08/19/Pytorch%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">下一篇</a>
+    
+    </div>
+
+
+    </div>
+    <div class="footer">
+        <div class="container">
+    <div class="social">
+	<ul class="social-list">
+		
+			
+				
+				
+				<li>
+					<a href="mailto:3253519642@qq.com" title="email" target="_blank">
+					<i class="fa fa-email"></i>
+					</a>
+				</li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				
+				<li>
+					<a href="https://github.com/ninesunztx" title="github" target="_self">
+					<i class="fa fa-github"></i>
+					</a>
+				</li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+	</ul>
+</div>
+    <div class="copyright">
+        <span>
+            
+            
+            
+                © Qatar 2024
+            
+        </span>
+    </div>
+    <div class="power">
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/CaiChenghan/iLiKE">iLiKE Theme</a>
+        </span>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <!--page counter part-->
+<script>
+function addCount (Counter) {
+    url=$('.article-date').attr('href').trim();
+    title = $('.article-title').text().trim();
+    var query = new AV.Query(Counter);
+    //use url as unique idnetfication
+    query.equalTo("url",url);
+    query.find({
+        success: function(results) {
+            if (results.length>0) {
+                var counter=results[0];
+                counter.fetchWhenSave(true); //get recent result
+                counter.increment("time");
+                counter.save();
+            } else {
+                var newcounter=new Counter();
+                newcounter.set("title",title);
+                newcounter.set("url",url);
+                newcounter.set("time",1);
+                newcounter.save(null,{
+                    success: function(newcounter) {
+                        //alert('New object created');
+                    }, error: function(newcounter,error) {
+                        alert('Failed to create');
+                    }
+                })
+            }
+        },
+        error: function(error) {
+            //find null is not a error
+            alert('Error:'+error.code+" "+error.message);
+        }
+    });
+}
+$(function() {
+    var Counter=AV.Object.extend("Counter");
+    //only increse visit counting when intering a page
+    if ($('.article-title').length == 1) {
+       addCount(Counter);
+    }
+    var query=new AV.Query(Counter);
+    query.descending("time");
+    // the sum of popular posts
+    query.limit(10); 
+    query.find({
+        success: function(results) {
+                for(var i=0;i<results.length;i++) {
+                    var counter=results[i];
+                    title=counter.get("title");
+                    url=counter.get("url");
+                    time=counter.get("time");
+                    // add to the popularlist widget
+                    showcontent=title+" ("+time+")";
+                    //notice the "" in href
+                    $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                }
+            },
+        error: function(error) {
+            alert("Error:"+error.code+" "+error.message);
+        }
+    });
+});
+</script>
+</div>
+    </div>
+</body>
+</html>
