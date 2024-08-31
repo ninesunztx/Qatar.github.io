@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  
+  <title>计算机网络-物理层 [ Qatar ]</title>
+  <link rel="icon" href="/favicon-2.ico" type="image/x-icon">
+  
+    <!-- stylesheets list from config.yml -->
+    
+      <link rel="stylesheet" href="/css/iLiKE.css">
+    
+  
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.13.2/dist/av-min.js"></script>
+    <script id="leancloud">
+      AV.init({
+          appId: "WIzeusj8QeFJSMb1iNuE4tHp-gzGzoHsz",
+          appKey: "T1vvZUnL3XUXKhaWV2sLwQj1"
+      });
+    </script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+    <div class="header">
+        <div class="container">
+    <div class="menu">
+      <div class="menu-left">
+        <a href="/">
+          <img src="/favicon-2.ico"></img>
+        </a>
+      </div>
+      <div class="menu-right">
+        
+          
+          
+          
+          
+          
+          
+          <a href="/">首页</a>
+        
+          
+          
+          
+          
+          
+          
+          <a href="/archives">归档</a>
+        
+          
+          
+          
+          
+          
+          
+          <a href="/about">关于</a>
+        
+      </div>
+    </div>
+</div>
+    </div>
+    <div class="container">
+        <h1 class="post-title">计算机网络-物理层</h1>
+<article class="post markdown-style">
+  <h2 id="1-物理层概述"><a href="#1-物理层概述" class="headerlink" title="1.物理层概述"></a>1.物理层概述</h2><p>物理层负责向数据链路层提供比特流传输服务。</p>
+<h3 id="1-1-物理层接口特性"><a href="#1-1-物理层接口特性" class="headerlink" title="1.1 物理层接口特性"></a>1.1 物理层接口特性</h3><p>(1)机械特性：形状和尺寸，引脚数目和排列，固定和锁定装置</p>
+<p>(2)电气特性：信号电压的范围，阻抗匹配的情况，传输速率，距离限制</p>
+<p>(3)功能特性：规定接口电缆的各条信号线的作用</p>
+<p>(4)过程特性：规定在信号线上传输比特流的一组操作过程，包括各信号间的时序关系</p>
+<h2 id="2-物理层下面的传输媒体"><a href="#2-物理层下面的传输媒体" class="headerlink" title="2.物理层下面的传输媒体"></a>2.物理层下面的传输媒体</h2><p>传输媒体是计算机网络设备之间的物理通路，也称为传输介质或传输媒介。</p>
+<p>传输媒体并不包含在计算机网络体系结构之中。</p>
+<p><img src="https://bu.dusays.com/2024/09/01/66d345910af3a.png" alt="image-20240901003217474"></p>
+<h2 id="3-传输方式"><a href="#3-传输方式" class="headerlink" title="3.传输方式"></a>3.传输方式</h2><h3 id="3-1-串行传输和并行传输"><a href="#3-1-串行传输和并行传输" class="headerlink" title="3.1 串行传输和并行传输"></a>3.1 串行传输和并行传输</h3><p><img src="https://bu.dusays.com/2024/09/01/66d3461a32225.png" alt="image-20240901003434746"></p>
+<p>串行传输适用于长距离数据传输，并行传输适合短距离数据传输。</p>
+<h3 id="3-2-同步传输和异步传输"><a href="#3-2-同步传输和异步传输" class="headerlink" title="3.2 同步传输和异步传输"></a>3.2 同步传输和异步传输</h3><h4 id="3-2-1-同步传输"><a href="#3-2-1-同步传输" class="headerlink" title="3.2.1 同步传输"></a>3.2.1 同步传输</h4><p><img src="https://bu.dusays.com/2024/09/01/66d346735cd09.png" alt="image-20240901003603903"></p>
+<p>收发双方时钟同步的方法：</p>
+<ol>
+<li>外同步：在收发双方之间增加一条时钟信号线。</li>
+<li>内同步：发送端将时钟信号编码到发送数据中一起发送。（例如曼彻斯特编码）</li>
+</ol>
+<h4 id="3-2-2-异步传输"><a href="#3-2-2-异步传输" class="headerlink" title="3.2.2 异步传输"></a>3.2.2 异步传输</h4><p><img src="https://bu.dusays.com/2024/09/01/66d34730c7279.png" alt="image-20240901003913423"></p>
+<p>字节之间异步，即字节之间的时间间隔不固定</p>
+<p>字节中每个比特仍然要同步，即各比特的持续时间是相同的</p>
+<h3 id="3-3-单向通信，双向交替通信和双向同时通信"><a href="#3-3-单向通信，双向交替通信和双向同时通信" class="headerlink" title="3.3 单向通信，双向交替通信和双向同时通信"></a>3.3 单向通信，双向交替通信和双向同时通信</h3><p><img src="https://bu.dusays.com/2024/09/01/66d347bbd59c0.png" alt="image-20240901004132268"></p>
+<h2 id="4-编码与调制"><a href="#4-编码与调制" class="headerlink" title="4.编码与调制"></a>4.编码与调制</h2><h3 id="4-1-编码与调制基本概念"><a href="#4-1-编码与调制基本概念" class="headerlink" title="4.1 编码与调制基本概念"></a>4.1 编码与调制基本概念</h3><p><img src="https://bu.dusays.com/2024/09/01/66d348557ac40.png" alt="image-20240901004405958"></p>
+<h3 id="4-2-常用编码方式"><a href="#4-2-常用编码方式" class="headerlink" title="4.2 常用编码方式"></a>4.2 常用编码方式</h3><p><img src="https://bu.dusays.com/2024/09/01/66d348a02484e.png" alt="image-20240901004520272"></p>
+<h3 id="4-3-基本带通调制方法和混合调制方法"><a href="#4-3-基本带通调制方法和混合调制方法" class="headerlink" title="4.3 基本带通调制方法和混合调制方法"></a>4.3 基本带通调制方法和混合调制方法</h3><p><img src="https://bu.dusays.com/2024/09/01/66d348ddad57c.png" alt="image-20240901004621936"></p>
+<p><img src="https://bu.dusays.com/2024/09/01/66d348ff20b1c.png" alt="image-20240901004655465"></p>
+<h2 id="5-信道的极限容量"><a href="#5-信道的极限容量" class="headerlink" title="5.信道的极限容量"></a>5.信道的极限容量</h2><h3 id="5-1-奈式准则"><a href="#5-1-奈式准则" class="headerlink" title="5.1 奈式准则"></a>5.1 奈式准则</h3><p><strong>理想</strong>低通信道的<strong>最高码元传输速率</strong> &#x3D;  2W Baud &#x3D; 2W 码元&#x2F;s</p>
+<p>W：信道的频率带宽（Hz）      </p>
+<p>Baud：波特，即码元&#x2F;s</p>
+<ul>
+<li>奈式准则可以根据信道的频率带宽计算出信道的最高码元传输速率。</li>
+<li>只要码元传输速率不超过奈式准则计算出的上限，就可以避免码间串扰。</li>
+<li>一个信道所能传输的最高码元速率，要明显低于奈式准则给出的上限值。</li>
+<li>码元传播速率又称波特率、调制速率、波形速率、符号速率。</li>
+<li>当1码元携带n比特时，波特率&#x3D;n*比特率</li>
+</ul>
+<h3 id="5-2-香农公式"><a href="#5-2-香农公式" class="headerlink" title="5.2 香农公式"></a>5.2 香农公式</h3><p>带宽受限且有高斯白噪声干扰的信道的极限信息传输速率<br>$$<br>C &#x3D; W\log_2 (1 + \frac{S}{N})(b&#x2F;s)<br>$$<br>C：信道的极限信息传输速率(b&#x2F;s)</p>
+<p>W：信道的频率带宽(Hz)</p>
+<p>S：信道内所传信号的平均功率 </p>
+<p>N：信道内的高斯噪声功率</p>
+<p>S&#x2F;N：信噪比，常用分贝（dB）表示<br>$$<br>信噪比(dB)&#x3D;10\log_{10}(\frac{S}{N})(dB)<br>$$</p>
+<ul>
+<li>W或S&#x2F;N越大，C就越高</li>
+<li>实际信道不可能无限制提高频率带宽W或信道中的信噪比S&#x2F;N</li>
+<li>实际信道能够达到的信息传输速率，要比香农公式给出的极限信息传输速率低不少，因为一些其他损伤没有计算</li>
+</ul>
+<h3 id="5-3-结论"><a href="#5-3-结论" class="headerlink" title="5.3 结论"></a>5.3 结论</h3><p>在信道频率带宽W一定的情况下，跟据奈式准则和香农公式，想要提高信息的传输速率，就必须采用多元制，并努力提高信道中的信噪比。</p>
+<p>香农公式发表后，各种信号处理方式和调制方法不断出现，目的是为了让码元可以携带更多比特进而可以尽可能接近香农公式给出的极限传输速率。</p>
+<h2 id="6-信道复用技术"><a href="#6-信道复用技术" class="headerlink" title="6.信道复用技术"></a>6.信道复用技术</h2><h3 id="6-1-信道复用技术的基本原理"><a href="#6-1-信道复用技术的基本原理" class="headerlink" title="6.1 信道复用技术的基本原理"></a>6.1 信道复用技术的基本原理</h3><p>复用就是在一条传输媒体上同时传输多路用户的信号。</p>
+<p>当一条信号传输媒体的传输容量大于多条信道传输的总容量时，就可以通过复用技术，在这条传输媒体上建立多条通信通道，以便充分利用传输媒体的带宽。</p>
+<p>尽管信道复用会增加通信成本，但如果复用的信道数量较大，还是比较划算的。</p>
+<h3 id="6-2-常见的信道复用技术"><a href="#6-2-常见的信道复用技术" class="headerlink" title="6.2 常见的信道复用技术"></a>6.2 常见的信道复用技术</h3><h4 id="6-2-1-频分复用FDM"><a href="#6-2-1-频分复用FDM" class="headerlink" title="6.2.1 频分复用FDM"></a>6.2.1 频分复用FDM</h4><p><img src="https://bu.dusays.com/2024/09/01/66d34f16aacfa.png" alt="image-20240901011250169"></p>
+<h4 id="6-2-2-时分复用TDM"><a href="#6-2-2-时分复用TDM" class="headerlink" title="6.2.2 时分复用TDM"></a>6.2.2 时分复用TDM</h4><p><img src="https://bu.dusays.com/2024/09/01/66d34f4190e5a.png" alt="image-20240901011338106"></p>
+<h4 id="6-2-3-波分复用WDM"><a href="#6-2-3-波分复用WDM" class="headerlink" title="6.2.3 波分复用WDM"></a>6.2.3 波分复用WDM</h4><p>根据频分复用的设计思想，可在一根光纤上同时传输多个频率相近的光载波信号，实现基于光纤的频分复用技术。</p>
+<p>目前可在一根光纤上复用80路或更多路的光载波信号。因此，这种技术也被称为密集波分复用DWDM。</p>
+<h4 id="6-2-4-码分复用CDM"><a href="#6-2-4-码分复用CDM" class="headerlink" title="6.2.4 码分复用CDM"></a>6.2.4 码分复用CDM</h4><p>如果有两个或多个站同时发送数据，则信道中的信号就是这些站各自所发送一系列码片序列或码片序列反码的叠加，为了从信道中分离出各个站的信号，给每个站指派码片序列时，必须遵守以下规则</p>
+<ul>
+<li>分配给每个站的码片序列必须各不相同，实际常采用伪随机码序列</li>
+<li>分配给每个站的码片序列必须相互正交，即各个码片序列相应的码片向量之间的规格化内积为0</li>
+</ul>
+<p><strong>向量A表示站A的码片向量，向量B表示站B的码片向量</strong></p>
+<p><img src="https://bu.dusays.com/2024/09/01/66d35157e5e44.png" alt="image-20240901012232651"></p>
+<p><img src="https://bu.dusays.com/2024/09/01/66d35172b478f.png" alt="image-20240901012259422"></p>
+
+</article>
+
+    <div class="pagenator post-pagenator">
+    
+    
+
+    
+    <p>上次更新 2024-09-01</p>
+    
+    
+        <a class="extend next post-next" href="/2024/08/27/CPU%E4%B8%89%E7%A7%8D%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F/">下一篇</a>
+    
+    </div>
+
+
+    </div>
+    <div class="footer">
+        <div class="container">
+    <div class="social">
+	<ul class="social-list">
+		
+			
+				
+				
+				<li>
+					<a href="mailto:3253519642@qq.com" title="email" target="_blank">
+					<i class="fa fa-email"></i>
+					</a>
+				</li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+				
+				<li>
+					<a href="https://github.com/ninesunztx" title="github" target="_self">
+					<i class="fa fa-github"></i>
+					</a>
+				</li>
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+			
+		
+	</ul>
+</div>
+    <div class="copyright">
+        <span>
+            
+            
+            
+                © Qatar 2024
+            
+        </span>
+    </div>
+    <div class="power">
+        <span>
+            Powered by <a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a> & <a target="_blank" rel="noopener" href="https://github.com/CaiChenghan/iLiKE">iLiKE Theme</a>
+        </span>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <!--page counter part-->
+<script>
+function addCount (Counter) {
+    url=$('.article-date').attr('href').trim();
+    title = $('.article-title').text().trim();
+    var query = new AV.Query(Counter);
+    //use url as unique idnetfication
+    query.equalTo("url",url);
+    query.find({
+        success: function(results) {
+            if (results.length>0) {
+                var counter=results[0];
+                counter.fetchWhenSave(true); //get recent result
+                counter.increment("time");
+                counter.save();
+            } else {
+                var newcounter=new Counter();
+                newcounter.set("title",title);
+                newcounter.set("url",url);
+                newcounter.set("time",1);
+                newcounter.save(null,{
+                    success: function(newcounter) {
+                        //alert('New object created');
+                    }, error: function(newcounter,error) {
+                        alert('Failed to create');
+                    }
+                })
+            }
+        },
+        error: function(error) {
+            //find null is not a error
+            alert('Error:'+error.code+" "+error.message);
+        }
+    });
+}
+$(function() {
+    var Counter=AV.Object.extend("Counter");
+    //only increse visit counting when intering a page
+    if ($('.article-title').length == 1) {
+       addCount(Counter);
+    }
+    var query=new AV.Query(Counter);
+    query.descending("time");
+    // the sum of popular posts
+    query.limit(10); 
+    query.find({
+        success: function(results) {
+                for(var i=0;i<results.length;i++) {
+                    var counter=results[i];
+                    title=counter.get("title");
+                    url=counter.get("url");
+                    time=counter.get("time");
+                    // add to the popularlist widget
+                    showcontent=title+" ("+time+")";
+                    //notice the "" in href
+                    $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+                }
+            },
+        error: function(error) {
+            alert("Error:"+error.code+" "+error.message);
+        }
+    });
+});
+</script>
+</div>
+    </div>
+</body>
+</html>

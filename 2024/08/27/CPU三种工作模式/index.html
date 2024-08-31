@@ -105,7 +105,7 @@
 <p>影子寄存器是靠硬件来操作的，对系统程序员不可见，是硬件为了减少性能损耗而设计的一个段描述符的高速缓存（类似cache）。其长度64位，内部存放8字节的段描述符数据。</p>
 <p>低三位之所以能放 TI 和 RPL，是因为段描述符 8 字节对齐，索引一定是8字节的整数倍，换算下来第三位永远是0，可以存放额外的信息。</p>
 <p>通常情况下，CS 和 SS 中 RPL 就组成了 CPL（当前权限级别），所以常常是 RPL&#x3D;CPL，进而 CPL 就表示发起访问者要以什么权限去访问目标段，当 CPL 大于目标段 DPL 时，则 CPU 禁止访问，只有 CPL 小于等于目标段 DPL 时才能访问。</p>
-<h3 id="2-5保护模式平坦模型"><a href="#2-5保护模式平坦模型" class="headerlink" title="2.5保护模式平坦模型"></a>2.5保护模式平坦模型</h3><p>代操作系统都会使用分页模型而非分段模型，但是 x86 CPU 并不能直接使用分页模型，而是要在分段模型的前提下，根据需要决定是否要开启分页。因为这是硬件的规定。</p>
+<h3 id="2-5保护模式平坦模型"><a href="#2-5保护模式平坦模型" class="headerlink" title="2.5保护模式平坦模型"></a>2.5保护模式平坦模型</h3><p>现代操作系统都会使用分页模型而非分段模型，但是 x86 CPU 并不能直接使用分页模型，而是要在分段模型的前提下，根据需要决定是否要开启分页。因为这是硬件的规定。</p>
 <p>但是我们可以简化设计，来使分段成为一种“虚设”，这就是保护模式的平坦模型。</p>
 <p>CPU32 位的寄存器最多只能产生 4GB 大小的地址，而一个段长度也只能是 4GB，所以我们把所有段的基地址设为 0，段的长度设为 0xFFFFF，段长度的粒度设为 4KB，这样所有的段都指向同一个（（段的长度 +1）* 粒度 - 1）字节大小的地址空间。</p>
 <p>也就是任何分段都指向一个大小为4GB的空间，对任意一个段内的偏移地址的访问等同于对所有段内偏移地址的访问，也就等同于没有分段了。</p>
@@ -128,7 +128,7 @@
 <p><img src="//cdn.qatarxt.top/image-20240827161510277.png" alt="image-20240827161510277"></p>
 <p>当描述符中的 L&#x3D;1，D&#x2F;B&#x3D;0 时，就是 64 位代码段，DPL 还是 0~3 的特权级。然后有多个段描述在内存中形成一个全局段描述符表，同样由 CPU 的 GDTR 寄存器指向。</p>
 <p>搓一个长模式下的段描述符表</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ex64_GDT:</span><br><span class="line">null_dsc:  dq 0</span><br><span class="line">;第一个段描述符CPU硬件规定必须为0</span><br><span class="line">c64_dsc:dq 0x0020980000000000  ;64位代码段-&gt;0000 0000 0010 0000 1001 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">;无效位填0</span><br><span class="line">;D/B=0,L=1,AVL=0 </span><br><span class="line">;P=1,DPL=0,S=1</span><br><span class="line">;T=1,C=0,R=0,A=0</span><br><span class="line">d64_dsc:dq 0x0000920000000000  ;64位数据段-&gt;0000 0000 1001 0010 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">;无效位填0</span><br><span class="line">;P=1,DPL=0,S=1</span><br><span class="line">;T=0,C/E=0,R/W=1,A=0</span><br><span class="line">eGdtLen   equ $ - null_dsc  ;GDT长度</span><br><span class="line">eGdtPtr:dw eGdtLen - 1  ;GDT界限</span><br><span class="line">     dq ex64_GDT</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ex64_GDT:</span><br><span class="line">null_dsc:  dq 0</span><br><span class="line">;第一个段描述符CPU硬件规定必须为0</span><br><span class="line">c64_dsc:dq 0x0020980000000000  </span><br><span class="line">;64位代码段-&gt;0000 0000 0010 0000 1001 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">;无效位填0</span><br><span class="line">;D/B=0,L=1,AVL=0 </span><br><span class="line">;P=1,DPL=0,S=1</span><br><span class="line">;T=1,C=0,R=0,A=0</span><br><span class="line">d64_dsc:dq 0x0000920000000000  </span><br><span class="line">;64位数据段-&gt;0000 0000 1001 0010 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000</span><br><span class="line">;无效位填0</span><br><span class="line">;P=1,DPL=0,S=1</span><br><span class="line">;T=0,C/E=0,R/W=1,A=0</span><br><span class="line">eGdtLen   equ $ - null_dsc  ;GDT长度</span><br><span class="line">eGdtPtr:dw eGdtLen - 1  ;GDT界限</span><br><span class="line">     dq ex64_GDT</span><br></pre></td></tr></table></figure>
 
 <p>上述代码段描述符的 DPL&#x3D;0，这说明需要最高权限即 CPL&#x3D;0 才能访问。若是数据段的话，G、D&#x2F;B、L 位都是无效的。</p>
 <h3 id="3-3长模式中断"><a href="#3-3长模式中断" class="headerlink" title="3.3长模式中断"></a>3.3长模式中断</h3><p>长模式支持 64 位内存寻址，所以要对中断门描述符进行修改和扩展。</p>
@@ -141,9 +141,11 @@
     <div class="pagenator post-pagenator">
     
     
+        <a class="extend prev post-prev" href="/2024/09/01/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C-%E7%89%A9%E7%90%86%E5%B1%82/">上一篇</a>
+    
 
     
-    <p>上次更新 2024-08-27</p>
+    <p>上次更新 2024-08-28</p>
     
     
         <a class="extend next post-next" href="/2024/08/23/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%A7%A3%E9%87%8A/">下一篇</a>
